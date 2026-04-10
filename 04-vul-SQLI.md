@@ -8,7 +8,7 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `POST /pizza/admin/ajax.php?action=login`
+- `/pizzafy/admin/ajax.php?action=login`
 
 ## **Overview**
 The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
@@ -75,7 +75,7 @@ This attack relies on **Error-based SQL injection technique**, where the attacke
 Below is a **POST** request demonstrating the vulnerability using a **time-based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=login HTTP/1.1
+POST /pizzafy/admin/ajax.php?action=login HTTP/1.1
 Host: localhost
 Content-Length: 73
 sec-ch-ua: 
@@ -89,7 +89,7 @@ Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/admin/login.php
+Referer: http://localhost/pizzafy/admin/login.php
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Cookie: PHPSESSID=b194kji2avnd4ra10063quhrp5
@@ -110,7 +110,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/ZTVTh6c.png)
+- ![](https://i.imgur.com/xbic4hF.png)
 ---
 
 ## Remediation
