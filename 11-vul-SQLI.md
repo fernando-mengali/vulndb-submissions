@@ -8,10 +8,10 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `/pizza/admin/ajax.php?action=delete_category`
+- `admin/ajax.php?action=delete_category`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability in DELETE Operation
