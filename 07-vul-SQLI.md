@@ -18,7 +18,7 @@ The Pizzafy Ecommerce System 1.0 contains multiple critical SQL Injection vulner
 
 ## Vulnerability Description
 
-A **Error-based SQL Injection vulnerability** was discovered in the **update functionality** of the **Pizzafy Ecommerce System 1.0**. This vulnerability occurs because the `id` parameter and `id` column is not properly sanitized, allowing an attacker to inject malicious SQL commands into the backend database query.
+A **Error-based SQL Injection vulnerability** was discovered in the **select functionality** of the **Pizzafy Ecommerce System 1.0**. This vulnerability occurs because the `id` parameter and `id` column is not properly sanitized, allowing an attacker to inject malicious SQL commands into the backend database query.
 
 ## Attack Technique
 
