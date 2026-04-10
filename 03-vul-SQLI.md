@@ -8,7 +8,7 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `POST /pizzafy/admin/ajax.php?action=login2`
+- `/pizzafy/admin/ajax.php?action=login2`
 
 ## **Overview**
 The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
