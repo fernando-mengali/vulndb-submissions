@@ -100,7 +100,7 @@ Content-Length: 0
 This payload injects the SQL command:  
 
 ```sql
-id=1%20and%20extractvalue(1,%20concat(0x7e,%20version()))%20--
+id=1%20and%20extractvalue(1,%20concat(0x7e,%20user()))%20--
 ```
 This makes it possible to get data from the database.
 
