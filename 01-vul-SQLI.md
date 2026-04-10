@@ -96,7 +96,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/rm7mIGb.png)
+- ![](https://i.imgur.com/RVkhN7B.png)
 ---
 
 ## Remediation
