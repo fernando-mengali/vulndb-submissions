@@ -150,7 +150,7 @@ public function login() {
 
 ## **Mitigation Recommendations:**  
 1. **Use Prepared Statements:** Employ parameterized queries to prevent SQL injection.  
-2. **Input Validation:** Validate and sanitize the `username` and `password` parameter to allow only expected values.  
+2. **Input Validation:** Validate and sanitize the `username` parameter to allow only expected values.  
 3. **Database Permissions:** Restrict database user privileges to limit the potential damage of SQL injections.  
 4. **Monitoring & Logging:** Track and alert unusual patterns, such as slow queries or repetitive access attempts.  
 5. **Security Testing:** Perform regular penetration testing and code reviews to identify and mitigate vulnerabilities.  
