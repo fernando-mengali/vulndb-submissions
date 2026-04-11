@@ -11,7 +11,7 @@
 - `/pizzafy/admin/ajax.php?action=get_cart_items&id=6`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains multiple critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains critical SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability in SELECT Operation
